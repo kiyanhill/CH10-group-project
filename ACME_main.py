@@ -1,36 +1,25 @@
 import os
 import retail_item
 import cashregister
+import pickle
 
 def main():
     pass
 
 def menu():
-    # menu recieves no arguments
-    # it prompts the user with options to either modify the inventory
-    # or shop
+    # get the inventory
+    file = open("inventory.dat", "rb")
     
-    # initalize variables
-    passwords = ["abcdef", "heisenburg"]
-    choice = 3
+    loaded_data = pickle.load(file)
     
-    # print the menu
-    print("Please choose from the options below:")
-    print("To access the inventory control system, press 1.")
-    print("To access the retail store, press 2.")
+    desc = loaded_data.get_description()
+    units = loaded_data.get_units()
+    price = float(loaded_data.get_price())
     
-    # get choice
-    while choice != 1 and choice != 2:
-        try:
-            choice = int(input("Enter your choice: "))
-        except:
-            choice = 3
+    print(f"{desc}")
+    print(f"{units} units in stock")
+    print(f"${price:.2f} for one")
+    file.close()
     
-    if choice == 1:
-        password = input("Enter the inventory control password: ")
-        
-        if password not in passwords:
-            print("Wrong password, returning to main.")
-            return
-        else:
-            retail_item.inventory_menu()
+    # get an item to buy
+    
