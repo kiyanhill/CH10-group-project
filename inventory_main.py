@@ -14,9 +14,9 @@ def add_inventory():
     item_price=input("Enter your price: ")
     #item_price=RetailItem(item_price)
     item=r.RetailItem(desc,item_units,item_price)
-    print(item)
-def write():
-    pass
+    print(item.get_description())
+    
+
 def inventory_menu():
     pass
 
