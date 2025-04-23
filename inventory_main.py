@@ -25,7 +25,11 @@ def write(item):
 
 def display():
     #just print the data had from the write file
-    pass
+    #read the file inventory . dat
+    file=open('inventory.dat','rb')
+    data=pickle.load(file)
+    item=data.get_description()
+    unit=data.get_units()
 
 def inventory_menu():
     
