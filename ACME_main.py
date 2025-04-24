@@ -5,60 +5,16 @@ import pickle
 
 def main():
     pass
-'''
-def menu():
-    # get the inventory
-    items = {}
-    with file = open("inventory.dat", "rb") as file:
-        for line in file:
-            # load a line
-            loaded_data = pickle.load(file)
 
-            # get the name, units, and price
-            desc = loaded_data.get_description()
-            units = loaded_data.get_units()
-            price = float(loaded_data.get_price())
-
-            # add the object to a dictionary with the name being the key
-
-            items[desc] = loaded_data
-
-            # print it for the viewer to see
-            print(f"{desc}")
-            print(f"{units} units in stock")
-            print(f"${price:.2f} for one")
-
-    # create the users cart
-    cart = cashregister.CashRegister()
-
-    # get an item to buy
-    item = input("What item would you like to purchase?\n:>")
-
-    while item not in items:
-        item = input("What item would you like to purchase?\n:>")
-
-    # set the users selected
-    selected = items[item]
-
-    #prime loop
-    amount = -1
-
-    while amount > selected.get_units() or amount <= 0:
-        try:
-            amount = int(input(f"How many {item}s would you like to buy?\n:>")
-            # validate
-            if amount <= 0:
-                print("Bad number, please use a number greater than 0.")
-            else:
-                print("Too many requested, not enough stock.")
-        except:
-            # exception
-            amount = amount
-'''
 def menu():
     # menu recieves no arguments
     # it prints out the users menu
 
+    # check if the inventory file exists
+    if not os.path.exists("inventory.dat"):
+        print("No inventory found. Add items to the inventory from the inventory control system.")
+        return
+    
     # iniitalize variables
     choice = -1
     choices = [1,2,3,4,5,6]
@@ -76,6 +32,12 @@ def menu():
 
     if choice == 1:
         view_cart(register)
+    elif choice == 2:
+        items_for_sale()
+    elif choice == 3:
+        purchase_item(register)
+    elif chocie == 4:
+        empty_cart(register)
 
 def view_cart(register):
     # view cart recieves an argument for the users cart
@@ -88,14 +50,97 @@ def view_cart(register):
         return
 
     for item in cart:
-        print(f"\nDescription: {item.get_description}")
+        print(f"\nDescription: {item.get_description()}")
         print(f"Units: {item.get_units()}")
         print(f"Retail Price: ${item.get_price()}")
 
 def items_for_sale():
     # items for sale recieves no arguments
     # it reads through inventroy to print all items currently for sale
-    
-    
+        
+    with open("inentory.dat", "rb") as file:
+        data = pickle.load(file)
+        
+        print(f"\nDescription: {data.get_description()}")
+        print(f"Units: {data.get_units()}")
+        print(f"Retail Price: ${item.get_price()}")
 
+def purchase_item(register):
+    # purchase item recieves an argument for the register
+    # it adds an item to the cart and
+    # asks if they want to add another
     
+    # initialize the items
+    items = {}
+    
+    # load all of the items for sale
+    with open("inventory.dat", "rb") as file:
+        item = pickle.load(file)
+        
+        print(f"\nDescription: {data.get_description()}")
+        print(f"Units: {data.get_units()}")
+        print(f"Retail Price: ${item.get_price()}")
+        
+        items[item.get_description()] = item
+        
+    # get their item they want to buy
+    while selected == False:
+        item = input("What item would you like to purchase?\n:>")
+        if item in items:
+            selected = True
+    
+    # get the items object
+    item = items[item]
+    
+    # get the amount of the item
+    while amount == False:
+        try:
+            amnt = int(input("How many would you like to purchase?\n:>"))
+            if amnt > item.get_units():
+                print("Too many items requested, not enough stock.")
+            elif amnt <= 0:
+                print("Too little items selected, please selected 1 or more.")
+            else:
+                amount = True
+        except:
+            pass
+                
+    # add it to the register
+    item = item.set_units(amount)
+    register.purchase_item(item)
+    
+        
+def empty_cart(register):
+    # empty cart recieves an argument for the cash register
+    # object and
+    # it clears the cart and returns
+    register.empty()
+
+def check_out(register):
+    # check out accepts an argument for the register
+    total = register.get_total()
+    cart = register.get_cart()
+    for item in cart:
+        print(f"\n{item.get_description()} <--> {item.get_amount() * item.get_price()}")
+    
+    print(f"Your total is {register.get_total()}")
+    print("Press Y to complete the transaction, anything else to empty the cart and return to the main.")
+    
+    choice = input(":>")
+    if choice.lower() == "y":
+        modify(cart)
+    else:
+        empty_cart(register)
+    
+def modify(items):
+    with open("inventory.dat", "rb") as file:
+        with open("inventory_temp.dat", "wb") as t_file:
+            for item in items:
+                data = pickle.load(file)
+                if item.get_description() == data.get_description():
+                    amnt = data.get_units() - item.get_units()
+                    pickle.dump(item.set_units(amnt), t_file)
+                else:
+                    pickle.dump(data, t_file)
+            os.remove("inventory.dat")
+            os.rename("inventory_temp.dat", "inventory.dat")
