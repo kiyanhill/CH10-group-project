@@ -30,6 +30,9 @@ def display():
     data=pickle.load(file)
     item=data.get_description()
     unit=data.get_units()
+    price=data.get_price()
+    
+    print(item, unit, price)
 
 def inventory_menu():
     
