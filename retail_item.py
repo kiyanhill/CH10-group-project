@@ -19,6 +19,9 @@ class RetailItem:
     def get_units(self):
         return self.units
     
+    def set_units(self,units):
+        self.units=units
+    
     def get_price(self):
         return self.price
     
