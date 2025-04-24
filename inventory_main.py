@@ -6,23 +6,21 @@ def add_inventory():
     #get input from user of item inventory and price
     
     desc=input("Enter your item: ")
-    #desc=r.RetailItem(desc)
+    
     
     item_units=input("Enter how many you want: ")
-    #item_unit=RetailItem(item_unit)
+       item_price=input("Enter your price: ")
     
-    item_price=input("Enter your price: ")
-    #item_price=RetailItem(item_price)
     item=r.RetailItem(desc,item_units,item_price)
     print(item.get_description())
     return item
-
+#------------------------------------------------------------
 def write(item):
     #write the inventory to the file
     filename='inventory.dat'
-    with open(filename,'wb') as file:
+    with open(filename,'ab') as file:
         pickle.dump(item,file)
-
+#-----------------------------------------------------------
 def display():
     #just print the data had from the write file
     #read the file inventory . dat
@@ -33,7 +31,7 @@ def display():
     price=data.get_price()
     
     print(item, unit, price)
-
+#-----------------------------------------------------------
 def inventory_menu():
     
     going='y'
