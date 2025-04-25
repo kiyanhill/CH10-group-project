@@ -8,7 +8,7 @@ class CashRegister():
         
     def get_total(self):
         for item in self.__cart:
-            self.__total += item.get_price()
+            self.__total += float(item.get_price())
         return self.__total
     
     def get_cart(self):
@@ -16,4 +16,5 @@ class CashRegister():
     
     def empty(self):
         self.__cart = []
+        self.__total = 0
     
