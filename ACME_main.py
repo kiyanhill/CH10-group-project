@@ -4,8 +4,32 @@ import cashregister
 import pickle
 
 def main():
-    pass
-
+    # main recieves no arguments
+    # it drives the whole program
+    
+    # print hte menu
+    print("Please choose from the optins below:")
+    print("To acess the inventory control system, press 1.")
+    print("To access the retail store, press 2.")
+    
+    # initialize the variables
+    choices = [1,2]
+    choice = -1
+    while choice not in choices:
+        choice = int(input("\nEnter your choice: "))
+    except:
+        pass
+    
+    if choice == 1:
+        if not os.path.exists("inventory.dat"):
+            print("Inventory file doesnt exist, creating...")
+            file = open("inventory.dat", "wb")
+            file.close()
+            
+            passwords = ["heisenburg"]
+            password = input("Enter the inventroy control password: ")
+            if password in passwords:
+                
 def menu():
     # menu recieves no arguments
     # it prints out the users menu
