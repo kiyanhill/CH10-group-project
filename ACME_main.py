@@ -246,24 +246,30 @@ def add_inventory():
     print(item.get_description())
     return item
 #------------------------------------------------------------
-def write(item):
+def write(items):
     #write the inventory to the file
-    filename='inventory.dat'
-    with open(filename,'ab') as file:
-        pickle.dump(item,file)
+    file = open("inventory.dat",'ab')
+    for item in items:
+        pickle.append(item,file)
+    file.close()
 #-----------------------------------------------------------
 def display():
     #just print the data had from the write file
     #read the file inventory . dat
     file=open('inventory.dat','rb')
     data=pickle.load(file)
-    item=data.get_description()
-    unit=data.get_units()
-    price=data.get_price()
-    
-    print("Description: ",item)
-    print("Units:",unit)
-    print("Price: ",price)
+    while data != "":
+        item=data.get_description()
+        unit=data.get_units()
+        price=data.get_price()
+        
+        print("Description: ",item)
+        print("Units:",unit)
+        print("Price: ",price)
+        try:
+            data=pickle.load(file)
+        except:
+            data = ""
 #-----------------------------------------------------------
 def inventory_menu():
     
@@ -276,20 +282,21 @@ def inventory_menu():
         print("3: write inventory")
         print("4: end")
         
-        
+        items = []
         #get input for the user choice
         choice= int(input(":>"))
         
         #process the menu
         if choice==1:
             item=add_inventory()
+            items.append(item)
         elif choice==2:
             display()
         elif choice==3:
-            write(item)
+            write(items)
         else:
-            main_menu()
             print("Please only make a valid choice form from the menu")
+            return
         going=input("Do you want to keep going? (y/n) :")
         if going=="n":
             return
