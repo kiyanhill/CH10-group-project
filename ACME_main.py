@@ -1,5 +1,5 @@
 import os
-import retail_item
+import retail_item as r
 import cashregister
 import pickle
 
@@ -8,29 +8,43 @@ def main():
     # it drives the whole program
     
     # print hte menu
-    print("Please choose from the optins below:")
+    print("Please choose from the options below:")
     print("To acess the inventory control system, press 1.")
     print("To access the retail store, press 2.")
+    print("To quit, press 3.")
     
     # initialize the variables
-    choices = [1,2]
+    choices = [1,2,3]
     choice = -1
     while choice not in choices:
-        choice = int(input("\nEnter your choice: "))
-    except:
-        pass
-    
+        try:
+            choice = int(input("\nEnter your choice: "))
+        except:
+            pass
+        
     if choice == 1:
         if not os.path.exists("inventory.dat"):
             print("Inventory file doesnt exist, creating...")
             file = open("inventory.dat", "wb")
             file.close()
-            
-            passwords = ["heisenburg"]
-            password = input("Enter the inventroy control password: ")
-            if password in passwords:
-                
-def menu():
+        # create passwords and get password
+        passwords = ["heisenburg"]
+        
+        password = input("Enter the inventroy control password: ")
+        if password not in passwords:
+           print("Incorrect password.\n")
+           main()
+        else:
+            inventory_menu()
+            main()
+               
+    elif choice == 2:
+        store_menu()
+        main()
+    else:
+        print("Goodbye, thank you for using ACME.")
+        
+def store_menu():
     # menu recieves no arguments
     # it prints out the users menu
 
@@ -47,7 +61,12 @@ def menu():
     while choice != 6:
         # print the menu
         print("\nWelcome to the ACME PoS retail system\nPlease choose from the following options:")
-        print("\t1 - View Cart\n\t2 - Display items for sale\n\t3 - Purchase Item\n\t 4 - Empty cart and start over\n\t5 - Check out\n\t 6- EXIT to main")
+        print("\t1 - View Cart")
+        print("\t2 - Display items for sale")
+        print("\t3 - Purchase Item")
+        print("\t4 - Empty cart and start over")
+        print("\t5 - Check out")
+        print("\t6- EXIT to main")
 
         while choice not in choices:
             try:
@@ -212,5 +231,64 @@ def modify(items):
     # rename them
     os.remove("inventory.dat")
     os.rename("inventory_temp.dat", "inventory.dat")
+
+# inventory main
+def add_inventory():
+    #get input from user of item inventory and price
+    
+    desc=input("Enter your item: ")
+    
+    
+    item_units=input("Enter how many you want: ")
+    item_price=input("Enter your price: ")
+    
+    item=r.RetailItem(desc,item_units,item_price)
+    print(item.get_description())
+    return item
+#------------------------------------------------------------
+def write(item):
+    #write the inventory to the file
+    filename='inventory.dat'
+    with open(filename,'ab') as file:
+        pickle.dump(item,file)
+#-----------------------------------------------------------
+def display():
+    #just print the data had from the write file
+    #read the file inventory . dat
+    file=open('inventory.dat','rb')
+    data=pickle.load(file)
+    item=data.get_description()
+    unit=data.get_units()
+    price=data.get_price()
+    
+    print(item, unit, price)
+#-----------------------------------------------------------
+def inventory_menu():
+    
+    going='y'
+    while going=='y':
+        #output the menu to user
+        print("Choose a program from the following options")
+        print("1: add inventory")
+        print("2: view inventory")
+        print("3: write inventory")
+        print("4: end")
         
-menu()
+        
+        #get input for the user choice
+        choice= int(input(":>"))
+        
+        #process the menu
+        if choice==1:
+            item=add_inventory()
+        elif choice==2:
+            display()
+        elif choice==3:
+            write(item)
+        else:
+            main_menu()
+            print("Please only make a valid choice form from the menu")
+        going=input("Do you want to keep going? (y/n) :")
+        if going=="n":
+            return
+main()
