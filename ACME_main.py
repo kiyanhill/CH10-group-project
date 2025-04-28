@@ -261,7 +261,9 @@ def display():
     unit=data.get_units()
     price=data.get_price()
     
-    print(item, unit, price)
+    print("Description: ",item)
+    print("Units:",unit)
+    print("Price: ",price)
 #-----------------------------------------------------------
 def inventory_menu():
     
